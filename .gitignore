@@ -1,0 +1,26 @@
+# Node dependencies
+node_modules/
+pnpm-debug.log
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Windows/OS system files
+Thumbs.db
+.DS_Store
+
+# Temporary files and logs
+*.tmp
+*.log
+
+# Subfolder ignores fallback
+portafolio-web/.agents/
+portafolio-web/skills-lock.json
+backend-portafolio/.env
+backend-portafolio/.tmp/
+backend-portafolio/.strapi/
