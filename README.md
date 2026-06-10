@@ -1,437 +1,322 @@
-<div align="center">
+# INFORME TÉCNICO: PORTAFOLIO WEB
+### Sistema de Gestión de Talento y Solicitudes - Veltrix Studio
 
-# 🖥️ Portafolio DevCuenca Solutions
-
-![Estado](https://img.shields.io/badge/estado-en%20desarrollo-yellow?style=for-the-badge)
-![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![pnpm](https://img.shields.io/badge/pnpm-10-F69220?style=for-the-badge&logo=pnpm&logoColor=white)
-![Strapi](https://img.shields.io/badge/Strapi-v5-4945FF?style=for-the-badge&logo=strapi&logoColor=white)
-
-**Portafolio profesional multiusuario para DevCuenca Solutions**
-
-*Universidad Politécnica Salesiana — Programación y Plataformas Web · Marzo – Agosto 2026*
-
-[🚀 Ver Demo](#-demo) · [📖 Documentación](#️-instalación-y-configuración) · [🐛 Reportar Bug](https://github.com/macobosf/Portafolio-DevCuencaSolutions/issues)
-
-</div>
+**Materia:** Programación y Plataformas Web  
+**Curso:** PPW P68  
+**Docente:** Ing. Pablo Torres  
+**Institución:** Universidad Politécnica Salesiana  
+**Autores:**  
+- Cinthya Ramón (cramonm12@gmail.com)  
+- Isaac Mora (isaacalf.135@gmail.com)  
+**Fecha:** Junio de 2026  
 
 ---
 
-## 📋 Tabla de contenidos
+## Tabla de Contenidos
 
-- [🚀 Demo](#-demo)
-- [📝 Descripción](#-descripción)
-- [🏗️ Arquitectura del sistema](#️-arquitectura-del-sistema)
-- [✅ Características](#-características)
-- [🛠️ Tecnologías](#️-tecnologías)
-- [📦 Requisitos previos](#-requisitos-previos)
-- [⚙️ Instalación y configuración](#️-instalación-y-configuración)
-- [🔐 Variables de entorno](#-variables-de-entorno)
-- [🔥 Configuración de Firebase](#-configuración-de-firebase)
-- [🎛️ Configuración de Strapi](#️-configuración-de-strapi)
-- [📁 Estructura del proyecto](#-estructura-del-proyecto)
-- [👥 Roles y permisos](#-roles-y-permisos)
-- [📖 Guía de uso](#-guía-de-uso)
-- [🚢 Despliegue](#-despliegue)
-- [👨‍💻 Contribuidores](#-contribuidores)
-- [📄 Licencia](#-licencia)
-
----
-
-## 🚀 Demo
-
-| Entorno | URL |
-|---------|-----|
-| 🌐 App pública | [https://portafolio-54995.web.app](https://portafolio-54995.web.app) |
-| 🎛️ Strapi Admin | [https://creative-ducks-5c57b268fa.strapiapp.com/admin](https://creative-ducks-5c57b268fa.strapiapp.com/admin) |
+- [1. Resumen del Proyecto](#1-resumen-del-proyecto)
+- [2. Descripción General](#2-descripción-general)
+- [3. Arquitectura del Sistema](#3-arquitectura-del-sistema)
+- [4. Proceso de Desarrollo](#4-proceso-de-desarrollo)
+- [5. Decisiones de Diseño y Tecnologías](#5-decisiones-de-diseño-y-tecnologías)
+- [6. Desafíos y Soluciones](#6-desafíos-y-soluciones)
+- [7. Estructura de Archivos](#7-estructura-de-archivos)
+- [8. Guía de Configuración](#8-guía-de-configuración)
+  - [8.1. Requisitos](#81-requisitos)
+  - [8.2. Variables de Entorno](#82-variables-de-entorno)
+  - [8.3. Configuración de Firebase](#83-configuración-de-firebase)
+  - [8.4. Configuración de Strapi CMS](#84-configuración-de-strapi-cms)
+- [9. Guía de Despliegue](#9-guía-de-despliegue)
+- [10. Guía de Usuario](#10-guía-de-usuario)
+  - [10.1. Guía para Clientes (Usuario Final)](#101-guía-para-clientes-usuario-final)
+  - [10.2. Guía para Programadores (Administrador)](#102-guía-para-programadores-administrador)
+- [11. Conclusiones](#11-conclusiones)
 
 ---
 
-## 📝 Descripción
+## 1. Resumen del Proyecto
 
-**Portafolio DevCuenca Solutions** es una aplicación web profesional que permite a los integrantes de DevCuenca Solutions mostrar sus proyectos, habilidades y servicios al público, y gestionar las solicitudes de contacto de usuarios externos.
+Este proyecto es una plataforma web para Veltrix Studio. Permite a los desarrolladores del equipo mostrar sus perfiles profesionales y los proyectos que han realizado. Además, los clientes interesados pueden registrarse en la página para enviar propuestas de proyectos directamente a los programadores y realizar el seguimiento en tiempo real. 
 
-### Objetivo académico
-
-Proyecto integrador de la materia **Programación y Plataformas Web**, dictada por el **Ing. Pablo Torres** en la **Universidad Politécnica Salesiana**, período Marzo–Agosto 2026. Aplica conceptos de desarrollo frontend moderno, integración de servicios cloud, autenticación, bases de datos en tiempo real y CMS headless.
-
-### Arquitectura general
-
-La aplicación separa claramente las responsabilidades: el frontend en Angular 21 consume datos del CMS (Strapi) para el contenido dinámico y usa Firebase para la autenticación y el almacenamiento de solicitudes. Toda la infraestructura está desplegada en la nube.
+El sistema utiliza Angular 21 para la interfaz visual, Strapi CMS v5 para gestionar el contenido de forma dinámica sin tocar código, y Firebase para manejar el registro de usuarios y el almacenamiento de las solicitudes.
 
 ---
 
-## 🏗️ Arquitectura del sistema
+## 2. Descripción General
+
+La aplicación está diseñada para conectar al equipo de Veltrix Studio con usuarios externos. 
+
+### Enlaces de la Plataforma
+- Aplicación Pública (Frontend): https://veltrix-6d976.web.app/
+- Strapi Admin (Panel de control del CMS): https://upbeat-chickens-1ee0436960.strapiapp.com/admin
+
+---
+
+## 3. Arquitectura del Sistema
+
+La aplicación está dividida en tres partes que se comunican entre sí:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        CLIENTE                              │
 │                                                             │
 │   ┌─────────────────────────────────────────────────────┐   │
-│   │               Angular 21 (SPA)                      │   │
-│   │   Signals · Standalone Components · OnPush · RxJS   │   │
+│   │               Angular 21 (Frontend)                 │   │
+│   │   Interfaz limpia, rápida y responsiva para el      │   │
+│   │   usuario.                                          │   │
 │   └────────────┬───────────────────┬────────────────────┘   │
 │                │                   │                         │
 │       ┌────────┴──────┐   ┌────────┴────────────┐           │
 │       │ Firebase Auth │   │  Strapi Cloud CMS   │           │
-│       │ (autenticación│   │ (contenido público  │           │
-│       │  de usuarios) │   │   vía REST API)     │           │
+│       │ (Inicio de    │   │ (Datos de perfiles, │           │
+│       │  sesión)      │   │  proyectos y webs)  │           │
 │       └───────┬───────┘   └─────────────────────┘           │
 │               │                                             │
 │       ┌───────┴───────────────┐                             │
 │       │   Cloud Firestore     │                             │
-│       │ (solicitudes/contacto)│                             │
+│       │ (Base de datos de     │                             │
+│       │  las solicitudes)     │                             │
 │       └───────────────────────┘                             │
 └─────────────────────────────────────────────────────────────┘
                         │
                         ▼
             ┌───────────────────────┐
             │   Firebase Hosting    │
-            │  (deploy automático)  │
+            │  (Publicación web)    │
             └───────────────────────┘
 ```
 
-**Flujo de datos:**
-
-- 📡 **Strapi Cloud** → suministra programadores, proyectos y servicios (lectura pública)
-- 🔐 **Firebase Auth** → gestiona login/registro de usuarios y programadores
-- 🗄️ **Cloud Firestore** → almacena y consulta solicitudes de contacto en tiempo real
-- 🌐 **Firebase Hosting** → sirve el bundle de producción de Angular
+1. Strapi CMS: Suministra la información pública de los programadores, sus proyectos y tecnologías.
+2. Firebase Authentication: Controla que los usuarios inicien sesión de forma segura con su correo y contraseña.
+3. Cloud Firestore: Almacena en tiempo real las propuestas enviadas por los clientes y las respuestas de los programadores.
+4. Firebase Hosting: Aloja y sirve la página web en internet.
 
 ---
 
-## ✅ Características
+## 4. Proceso de Desarrollo
 
-- ✅ **Portafolio multiusuario** — 2 programadores con perfiles independientes
-- ✅ **Autenticación con Firebase** — registro, login y sesión persistente
-- ✅ **Gestión de solicitudes en Firestore** — envío y seguimiento en tiempo real
-- ✅ **Dashboard para programadores** — gestión de solicitudes recibidas con estados
-- ✅ **Dashboard para usuarios externos** — historial de solicitudes enviadas
-- ✅ **Contenido dinámico con Strapi CMS** — sin necesidad de redeploy para actualizar datos
-- ✅ **Diseño responsive** — TailwindCSS v3 + DaisyUI v3, adaptado a todos los dispositivos
-- ✅ **Performance** — ChangeDetection OnPush, signals, lazy loading por ruta
-- ✅ **Deploy en Firebase Hosting** — HTTPS, CDN global
-- ✅ **CMS en Strapi Cloud** — panel de administración en la nube
+Para construir esta aplicación se siguieron los siguientes pasos:
 
----
-
-## 🛠️ Tecnologías
-
-| Tecnología | Versión | Uso |
-|-----------|---------|-----|
-| [Angular](https://angular.dev) | 21 | Framework frontend (SPA) |
-| [TypeScript](https://www.typescriptlang.org) | 5.x | Lenguaje principal |
-| [TailwindCSS](https://tailwindcss.com) | 3 | Estilos utilitarios |
-| [DaisyUI](https://daisyui.com) | 3 | Componentes UI sobre Tailwind |
-| [Firebase Authentication](https://firebase.google.com/products/auth) | 11 | Autenticación de usuarios |
-| [Cloud Firestore](https://firebase.google.com/products/firestore) | 11 | Base de datos NoSQL en tiempo real |
-| [AngularFire](https://github.com/angular/angularfire) | 19 | SDK Angular para Firebase |
-| [Strapi](https://strapi.io) | v5 | CMS headless (REST API) |
-| [Strapi Cloud](https://cloud.strapi.io) | — | Hosting del CMS |
-| [Firebase Hosting](https://firebase.google.com/products/hosting) | — | Deploy del frontend |
-| [pnpm](https://pnpm.io) | 10 | Gestor de paquetes |
-| [RxJS](https://rxjs.dev) | 7 | Programación reactiva |
+1. Planificación: Definición de las necesidades del cliente (enviar solicitudes) y del desarrollador (responderlas y mostrar su portafolio).
+2. Diseño de datos: Creación de los esquemas de bases de datos para programadores, proyectos y solicitudes de contacto.
+3. Configuración inicial: Creación del proyecto base en Angular y enlace con los servicios de Firebase y Strapi.
+4. Creación de los servicios: Programación de la lógica que conecta el código con las bases de datos externas.
+5. Diseño visual: Maquetación de las páginas de inicio, perfiles, login y paneles de control usando estilos responsivos.
+6. Pruebas y seguridad: Ajuste de las reglas de seguridad en Firebase para evitar que usuarios no autorizados lean solicitudes ajenas.
+7. Lanzamiento: Despliegue de los servicios en la nube y publicación del frontend.
 
 ---
 
-## 📦 Requisitos previos
+## 5. Decisiones de Diseño y Tecnologías
 
-Antes de comenzar, asegúrate de tener instalado:
+Se eligieron las siguientes herramientas por su facilidad de uso y velocidad de desarrollo:
 
-- ![Node.js](https://img.shields.io/badge/Node.js-24+-339933?style=flat&logo=nodedotjs&logoColor=white) — [Descargar](https://nodejs.org)
-- ![pnpm](https://img.shields.io/badge/pnpm-10+-F69220?style=flat&logo=pnpm&logoColor=white) — `npm install -g pnpm`
-- ![Angular CLI](https://img.shields.io/badge/Angular_CLI-21+-DD0031?style=flat&logo=angular&logoColor=white) — `pnpm add -g @angular/cli`
-- ![Firebase CLI](https://img.shields.io/badge/Firebase_CLI-latest-FFCA28?style=flat&logo=firebase&logoColor=black) — `pnpm add -g firebase-tools`
-- Una cuenta en [Firebase](https://firebase.google.com) con un proyecto configurado
-- Una cuenta en [Strapi Cloud](https://cloud.strapi.io) *(opcional, solo para producción)*
+- Angular 21: Framework moderno que permite estructurar la página en componentes independientes y cargarlos rápidamente.
+- Angular Signals: Sistema que actualiza la interfaz visual al instante cuando se detecta un cambio en los datos, sin ralentizar la aplicación.
+- TailwindCSS: Framework de diseño que facilita la creación de interfaces visuales atractivas, responsivas y consistentes.
+- Strapi CMS v5: Permite a los desarrolladores actualizar su información de perfil (como biografía o nuevos proyectos) desde un panel visual intuitivo, sin necesidad de reprogramar la web.
+- Firebase Auth y Firestore: Facilitan el registro seguro de usuarios y la actualización de propuestas en tiempo real. Si un desarrollador responde una solicitud, el cliente la ve de inmediato en su pantalla.
+- Servicio SEO: Servicio que cambia el título y la descripción de la pestaña del navegador de forma automática según la página donde esté el usuario, mejorando la indexación en buscadores.
 
 ---
 
-## ⚙️ Instalación y configuración
+## 6. Desafíos y Soluciones
 
-### Frontend (Angular)
+### Carga de Modelos 3D (Spline)
+- Problema: Los gráficos en 3D del inicio consumían demasiada memoria y a veces daban error de carga.
+- Solución: Se optimizaron los scripts de carga para que no bloqueen la página y se configuraron imágenes estáticas alternativas para dispositivos que no soporten 3D.
 
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/macobosf/Portafolio-DevCuencaSolutions.git
-cd Portafolio-DevCuencaSolutions
+### Errores de Permisos en la Base de Datos (Firestore)
+- Problema: Al activar la seguridad para que los usuarios no puedan ver las solicitudes de otros, la pantalla del panel empezó a fallar con mensajes de acceso denegado.
+- Solución: Se ajustó el código del frontend para que las consultas tengan exactamente los mismos filtros de correo y usuario que las reglas de seguridad exigen, permitiendo el acceso correcto.
 
-# 2. Instalar dependencias
-pnpm install
+### Proyectos Vacíos desde el Servidor (Strapi)
+- Problema: Al consultar los programadores, la lista de proyectos y tecnologías de cada uno aparecía en blanco.
+- Solución: Se configuró el servicio HTTP para añadir el parámetro de lectura completa (`?populate=*`) en las llamadas al servidor de Strapi.
 
-# 3. Configurar variables de entorno (ver sección siguiente)
-#    Editar src/environments/environment.ts
+---
 
-# 4. Iniciar servidor de desarrollo
-ng serve --configuration development
+## 7. Estructura de Archivos
+
+Los archivos principales del proyecto se organizan de la siguiente manera:
+
+```
+portafolio-web/
+├── src/
+│   ├── app/
+│   │   ├── core/                        # Lógica compartida de la aplicación
+│   │   │   ├── services/
+│   │   │   │   ├── auth.service.ts          # Control de usuarios y sesiones
+│   │   │   │   ├── solicitudes.service.ts   # Guardar y consultar solicitudes
+│   │   │   │   ├── strapi.service.ts        # Obtener datos del CMS
+│   │   │   │   └── seo.service.ts           # Control de títulos de la página
+│   │   │   ├── guards/
+│   │   │   │   └── auth.guard.ts            # Protege páginas que requieren login
+│   │   │   └── models/
+│   │   │       └── models.ts            # Definición de estructuras de datos
+│   │   ├── views/                       # Vistas de la aplicación
+│   │   │   ├── home/                    # Página de bienvenida
+│   │   │   ├── profile/                 # Perfil del programador
+│   │   │   ├── dashboard/               # Panel para gestionar propuestas
+│   │   │   ├── auth/                    # Pantallas de login y registro
+│   │   │   └── programadores/           # Lista de integrantes del equipo
+│   │   ├── components/                  # Elementos visuales reutilizables
+│   │   │   ├── header/                  # Menú de navegación
+│   │   │   └── footer/                  # Pie de página
+│   │   ├── app.routes.ts                # Configuración de las rutas
+│   │   └── app.ts                       # Componente principal
+│   ├── environments/
+│   │   ├── environment.ts               # Configuración para pruebas locales
+│   │   └── environment.prod.ts          # Configuración para la web publicada
+│   └── styles.scss                      # Estilos visuales generales
+├── firestore.rules                      # Reglas de seguridad de la base de datos
+└── package.json                         # Lista de dependencias del proyecto
 ```
 
-La aplicación estará disponible en `http://localhost:4200`.
-
-### CMS (Strapi)
-
-```bash
-# 1. Clonar el repositorio del CMS
-git clone https://github.com/macobosf/portafolio-cms.git
-cd portafolio-cms
-
-# 2. Instalar dependencias
-pnpm install
-
-# 3. Iniciar en modo desarrollo
-pnpm develop
-```
-
-El panel de administración estará disponible en `http://localhost:1337/admin`.
-
 ---
 
-## 🔐 Variables de entorno
+## 8. Guía de Configuración
 
-Crea o edita el archivo `src/environments/environment.ts` con tus propios valores:
+Siga estos pasos para ejecutar el proyecto en su computadora.
+
+### 8.1. Requisitos
+
+Debe tener instalado:
+- Node.js (versión 18 o superior)
+- pnpm (instalador de paquetes)
+- Angular CLI
+- Firebase CLI
+
+### 8.2. Variables de Entorno
+
+Cree o configure el archivo `src/environments/environment.ts` con sus credenciales:
 
 ```typescript
 export const environment = {
   production: false,
   strapiUrl: 'http://localhost:1337/api',
+  strapiToken: 'SU_TOKEN_DE_STRAPI',
   firebase: {
-    apiKey: 'TU_API_KEY',
-    authDomain: 'TU_PROJECT.firebaseapp.com',
-    projectId: 'TU_PROJECT_ID',
-    storageBucket: 'TU_PROJECT.firebasestorage.app',
-    messagingSenderId: 'TU_SENDER_ID',
-    appId: 'TU_APP_ID',
+    apiKey: 'SU_API_KEY',
+    authDomain: 'SU_PROYECTO.firebaseapp.com',
+    projectId: 'SU_ID_DEL_PROYECTO',
+    storageBucket: 'SU_PROYECTO.firebasestorage.app',
+    messagingSenderId: 'SU_SENDER_ID',
+    appId: 'SU_APP_ID',
   },
 };
 ```
 
-> ⚠️ **Importante:** No subas `environment.ts` con valores reales al repositorio. Agrégalo a `.gitignore` o usa variables de entorno del CI/CD para producción.
+### 8.3. Configuración de Firebase
 
-Para producción, edita `src/environments/environment.prod.ts` cambiando `production: true` y apuntando a la URL de Strapi Cloud.
+1. Ingrese a Firebase Console y cree un proyecto nuevo.
+2. Vaya a Authentication y active el inicio de sesión con Correo electrónico y contraseña.
+3. Cree una base de datos Cloud Firestore en modo de prueba.
+4. Remplace las reglas en la pestaña Reglas o use este archivo `firestore.rules`:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /solicitudes/{solicitudId} {
+      allow create: if request.auth != null;
+      
+      allow read: if request.auth != null && 
+        (resource.data.uid == request.auth.uid || 
+         resource.data.correoUsuario == request.auth.token.email ||
+         resource.data.correoSolicitante == request.auth.token.email ||
+         resource.data.correoProgramador == request.auth.token.email);
+         
+      allow update: if request.auth != null && 
+        (resource.data.uid == request.auth.uid || 
+         resource.data.correoUsuario == request.auth.token.email ||
+         resource.data.correoSolicitante == request.auth.token.email ||
+         resource.data.correoProgramador == request.auth.token.email);
+    }
+  }
+}
+```
+
+### 8.4. Configuración de Strapi CMS
+
+1. Crear tablas (Content Types):
+   Ingrese al panel de control y cree las tablas con los siguientes campos:
+   - Programador: `Full_name`, `Specialty`, `Short_description`, `Full_description`, `Contact_Email`, `Profile_picture` (imagen), `Identifier` y relaciones con Proyectos y Tecnologías.
+   - Proyecto: `Project_Name`, `Identifier`, `Short_description`, `Full_description`, `tipo_de_proyecto`, `Technologies_used`, `Link_repository`, `Link_demo`, `Featured` (sí/no) e imagen principal.
+   - Servicio: `service_name`, `description`.
+   - Tecnologia: `nombre`, `logo` (imagen), `categoria`.
+
+2. Activar accesos públicos:
+   Vaya a Settings -> Roles -> Public y marque las opciones `find` y `findOne` de todas las tablas creadas para que la web pueda leerlas.
+
+3. Crear token:
+   En Settings -> API Tokens cree un token con permisos de lectura y escritura para copiarlo en su configuración.
 
 ---
 
-## 🔥 Configuración de Firebase
+## 9. Guía de Despliegue
 
-1. Accede a [Firebase Console](https://console.firebase.google.com) y crea un nuevo proyecto.
+Para subir la página a internet ejecute los siguientes comandos en la consola:
 
-2. **Habilitar Authentication:**
-   - Ve a *Authentication → Sign-in method*
-   - Activa **Email/Password**
-
-3. **Crear base de datos Firestore:**
-   - Ve a *Firestore Database → Crear base de datos*
-   - Selecciona modo producción o prueba según tu entorno
-
-4. **Crear la colección `programadores`** con un documento por cada programador:
-
-   ```json
-   {
-     "nombre": "Marco Antonio Cobos Farfán",
-     "email": "marcocobos15@gmail.com"
-   }
+1. Compilar la aplicación:
+   ```bash
+   pnpm run build
+   ```
+2. Iniciar sesión en Firebase (si no lo ha hecho):
+   ```bash
+   npx firebase login
+   ```
+3. Subir la página web compilada:
+   ```bash
+   npx firebase deploy --only hosting
+   ```
+4. Subir las reglas de base de datos actualizadas:
+   ```bash
+   npx firebase deploy --only firestore:rules
    ```
 
-   Esta colección es consultada al iniciar sesión para determinar si el usuario tiene rol de programador.
+---
 
-5. **Configurar reglas de seguridad de Firestore** (`firestore.rules`):
+## 10. Guía de Usuario
 
-   ```
-   rules_version = '2';
-   service cloud.firestore {
-     match /databases/{database}/documents {
-       // Programadores — solo lectura autenticada
-       match /programadores/{doc} {
-         allow read: if request.auth != null;
-       }
-       // Solicitudes — lectura y escritura autenticada
-       match /solicitudes/{doc} {
-         allow read, write: if request.auth != null;
-       }
-     }
-   }
-   ```
+### 10.1. Guía para Clientes (Usuario Final)
 
-6. Copia las credenciales desde *Configuración del proyecto → Tus apps* y pégalas en `environment.ts`.
+1. Explorar la web:
+   - Entre a la página de inicio. Verá los servicios y el equipo de trabajo.
+   - Ingrese a la sección del equipo para ver los perfiles de Isaac Mora o Cinthya Ramón.
+   - Haga clic en cualquiera de ellos para ver su experiencia y proyectos anteriores.
+
+2. Crear cuenta e iniciar sesión:
+   - Haga clic en el botón "Iniciar Sesión".
+   - Si no tiene cuenta, haga clic en el botón de registro, ingrese sus datos y confírmelos.
+
+3. Enviar una solicitud de proyecto:
+   - En el perfil de un desarrollador, presione "Iniciar Contrato" o vaya a la opción "Dashboard" del menú superior.
+   - Complete el formulario escribiendo su nombre, seleccionando al programador y describiendo qué tipo de proyecto necesita.
+   - Presione el botón de enviar.
+
+4. Ver el estado de sus solicitudes:
+   - En la sección "Dashboard", podrá ver todas las solicitudes que ha enviado.
+   - El estado de la propuesta cambiará de "Pendiente" a "Respondida" cuando el desarrollador la revise.
+   - Podrá leer las notas u observaciones de respuesta escritas por el programador en esa misma sección.
+
+### 10.2. Guía para Programadores (Administrador)
+
+1. Ingreso al panel:
+   - Inicie sesión con el correo electrónico asociado a su perfil de Strapi (como `cramonm12@gmail.com` para Cinthya o `isaacalf.135@gmail.com` para Isaac). El sistema lo reconocerá como miembro del equipo.
+
+2. Responder a clientes:
+   - Entre a su "Dashboard". Verá la lista de solicitudes enviadas por clientes directamente a usted.
+   - Escriba una respuesta u observación en el campo de texto de la solicitud pendiente y haga clic en "Responder". El cliente recibirá la actualización inmediatamente.
+
+3. Editar información y proyectos:
+   - Mientras tenga la sesión abierta, en su perfil público verá botones para editar sus datos personales.
+   - Puede modificar su biografía, cambiar su foto de perfil cargándola desde su computadora o agregar nuevos proyectos a su catálogo rellenando el formulario técnico (nombre, enlaces de GitHub y demostraciones, tecnologías y tipo de proyecto). Al guardar, los cambios se actualizarán al instante.
 
 ---
 
-## 🎛️ Configuración de Strapi
+## 11. Conclusiones
 
-1. **Crear los Content Types** en el panel de administración (`/admin/plugins/content-type-builder`):
+La combinación de Angular 21, Strapi y Firebase permite ofrecer una plataforma rápida y segura para Veltrix Studio. 
 
-   | Content Type | Campos principales |
-   |---|---|
-   | **Programador** | `nombre`, `especialidad`, `descripcionBreve`, `descripcionCompleta`, `correo`, `github`, `linkiden`, `activo`, `slug`, `tecnologias` (JSON) |
-   | **Proyecto** | `nombre`, `slug`, `descripcionBreve`, `descripcionCompleta`, `tipo`, `tecnologias` (JSON), `repoUrl`, `demoUrl`, `destacado`, `programadores` (relación Many-to-Many) |
-   | **Servicio** | `nombre`, `descripcion`, `icono`, `orden` |
-
-2. **Configurar permisos públicos** en *Settings → Roles → Public*:
-   - Programador: `find`, `findOne`
-   - Proyecto: `find`, `findOne`
-   - Servicio: `find`, `findOne`
-
-3. **Cargar datos de ejemplo** desde el panel o mediante la API con un token de administrador.
-
----
-
-## 📁 Estructura del proyecto
-
-```
-Portafolio-DevCuencaSolutions/
-├── src/
-│   ├── app/
-│   │   ├── core/                        # Servicios y datos globales
-│   │   │   ├── auth.service.ts          # Lógica de autenticación Firebase
-│   │   │   ├── auth.guard.ts            # Guardia de rutas protegidas
-│   │   │   ├── firestore.service.ts     # CRUD de solicitudes en Firestore
-│   │   │   ├── strapi.service.ts        # Consumo de la API de Strapi
-│   │   │   └── mock-data.ts             # Interfaces TypeScript del dominio
-│   │   ├── pages/                       # Vistas / rutas lazy
-│   │   │   ├── home/                    # Página de inicio
-│   │   │   ├── programmer-profile/      # Perfil de programador
-│   │   │   ├── projects/                # Listado de proyectos
-│   │   │   ├── project-detail/          # Detalle de proyecto
-│   │   │   ├── contact-request/         # Formulario de solicitud
-│   │   │   ├── dashboard-programmer/    # Panel del programador
-│   │   │   ├── dashboard-user/          # Panel del usuario externo
-│   │   │   ├── login/                   # Login
-│   │   │   ├── register/                # Registro
-│   │   │   └── not-found/               # 404
-│   │   ├── shared/
-│   │   │   ├── components/              # Componentes reutilizables
-│   │   │   │   ├── navbar/
-│   │   │   │   ├── footer/
-│   │   │   │   ├── programmer-card/
-│   │   │   │   ├── project-card/
-│   │   │   │   ├── service-card/
-│   │   │   │   ├── loading-spinner/
-│   │   │   │   └── request-badge/
-│   │   │   └── directives/
-│   │   │       └── fade-in.directive.ts # Animación de entrada
-│   │   ├── app.routes.ts                # Definición de rutas
-│   │   ├── app.config.ts                # Providers de la aplicación
-│   │   └── app.ts                       # Componente raíz
-│   ├── environments/
-│   │   ├── environment.ts               # Desarrollo (local)
-│   │   └── environment.prod.ts          # Producción
-│   └── styles.css                       # Estilos globales + Tailwind
-├── .firebaserc                          # Proyecto Firebase activo
-├── firebase.json                        # Configuración de Firebase Hosting
-├── tailwind.config.js                   # Configuración de Tailwind
-├── angular.json                         # Configuración Angular CLI
-├── package.json
-└── pnpm-lock.yaml
-```
-
----
-
-## 👥 Roles y permisos
-
-| Rol | Acceso | Funcionalidades |
-|-----|--------|-----------------|
-| 🌐 **Visitante público** | Sin autenticación | Ver perfiles de programadores, proyectos y servicios. Navegar por el portafolio. |
-| 👤 **Usuario externo registrado** | Firebase Auth (email/password) | Todo lo del visitante + enviar solicitudes de contacto a programadores + ver historial de solicitudes en el dashboard de usuario. |
-| 💻 **Programador** | Firebase Auth + email en colección `programadores` | Todo lo anterior + acceso al dashboard de programador + ver y gestionar solicitudes recibidas + actualizar estado y agregar observaciones. |
-
-> El rol de programador se determina automáticamente al iniciar sesión: si el email del usuario coincide con un documento en la colección `programadores` de Firestore, se le asigna ese rol.
-
----
-
-## 📖 Guía de uso
-
-### Como visitante público
-
-1. Accede a [https://portafolio-54995.web.app](https://portafolio-54995.web.app)
-2. Explora la página de inicio: equipo, servicios y proyectos destacados
-3. Navega a **Proyectos** para ver el portafolio completo con filtros por tipo
-4. Haz clic en cualquier proyecto para ver su detalle
-5. Haz clic en el perfil de un programador para ver sus proyectos y tecnologías
-
-### Como usuario externo registrado
-
-1. Regístrate en **/registro** con tu email y contraseña
-2. Inicia sesión en **/login**
-3. Desde el perfil de un programador, haz clic en **"Solicitar servicio"**
-4. Completa el formulario de solicitud y envíalo
-5. Consulta el estado de tus solicitudes en tu **Dashboard de usuario**
-
-### Como programador
-
-1. Inicia sesión con el email registrado en la colección `programadores` de Firestore
-2. Accedes automáticamente al **Dashboard de programador**
-3. Visualiza todas las solicitudes recibidas con sus estados
-4. Actualiza el estado de cada solicitud (*Pendiente / Atendida*) y agrega observaciones
-5. Gestiona tu contenido (proyectos, descripción, tecnologías) desde el **panel de Strapi**
-
----
-
-## 🚢 Despliegue
-
-### Firebase Hosting (Frontend)
-
-```bash
-# 1. Build de producción
-ng build --configuration production
-
-# 2. Login en Firebase (primera vez)
-firebase login
-
-# 3. Deploy
-firebase deploy --only hosting
-```
-
-El sitio quedará disponible en `https://portafolio-54995.web.app` en pocos segundos.
-
-### Strapi Cloud (CMS)
-
-El CMS se despliega automáticamente desde GitHub. Cualquier push a la rama `main` del repositorio del CMS dispara un nuevo build en Strapi Cloud:
-
-```bash
-git add .
-git commit -m "feat: actualizar contenido"
-git push origin main
-# → deploy automático en Strapi Cloud
-```
-
----
-
-## 👨‍💻 Contribuidores
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/macobosf">
-        <img src="https://github.com/macobosf.png" width="80" alt="Marco Cobos"/><br/>
-        <sub><b>Marco Antonio Cobos Farfán</b></sub>
-      </a><br/>
-      <sub>Redes · Frontend · Arquitectura</sub>
-    </td>
-    <td align="center">
-      <a href="https://github.com/christianastudillo">
-        <img src="https://github.com/christianastudillo.png" width="80" alt="Christian Astudillo"/><br/>
-        <sub><b>Christian Ismael Astudillo Vásquez</b></sub>
-      </a><br/>
-      <sub>Backend · Java · Sistemas</sub>
-    </td>
-  </tr>
-</table>
-
----
-
-## 📄 Licencia
-
-Este proyecto está bajo la licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
-
----
-
-<div align="center">
-
-Desarrollado con ❤️ para la **Universidad Politécnica Salesiana**
-
-*Programación y Plataformas Web · Ing. Pablo Torres · 2026*
-
-</div>
+Los programadores del equipo (Cinthya Ramón e Isaac Mora) pueden actualizar sus portafolios y responder a clientes sin necesidad de editar código fuente, mientras que los clientes externos disponen de un portal fluido para realizar solicitudes y comunicarse directamente con el equipo en tiempo real.
