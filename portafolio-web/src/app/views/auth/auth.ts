@@ -1,7 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { SeoService } from '../../core/services/seo.service';
 
 @Component({
   selector: 'app-auth',
@@ -9,17 +10,26 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
 })
-export class Auth {
+export class Auth implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly seoService = inject(SeoService);
 
-  // Modo: 'login' | 'registro'
+  ngOnInit() {
+    this.seoService.generateTags({
+      title: 'Veltrix Studio - Iniciar Sesión / Registro',
+      description: 'Ingresa a tu cuenta de Veltrix Studio para enviar y dar seguimiento a propuestas de desarrollo de software y páginas web.',
+      route: '/login'
+    });
+  }
+
+  // Modo de pantalla: ingresar o registrarse
   mode = signal<'login' | 'registro'>('login');
   loading = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
 
-  // Formulario reactivo
+  // Formulario para ingresar o registrarse
   authForm = this.fb.nonNullable.group({
     nombre: [''],
     email: ['', [Validators.required, Validators.email]],

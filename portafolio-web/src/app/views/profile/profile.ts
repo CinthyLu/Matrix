@@ -26,31 +26,31 @@ export class Profile implements OnInit {
   programmer = signal<Programador | null>(null);
   loading = signal<boolean>(true);
 
-  // Estados de rol y del modal de adición de proyectos
+  // Control de accesos y de ventanas para proyectos
   isOwnProfile = signal<boolean>(false);
   showAddProjectModal = signal<boolean>(false);
   savingProject = signal<boolean>(false);
   selectedFile: File | null = null;
   editingProjectId = signal<string | null>(null);
 
-  // Estados de edición de perfil
+  // Control de ventanas para editar perfil
   showEditProfileModal = signal<boolean>(false);
   savingProfile = signal<boolean>(false);
   selectedProfileFile: File | null = null;
 
-  // Formulario reactivo para registrar nuevos proyectos
+  // Formulario para registrar proyectos nuevos
   projectForm = this.fb.nonNullable.group({
     Project_Name: ['', [Validators.required, Validators.minLength(3)]],
     tipo_de_proyecto: ['personal', Validators.required],
     Short_description: ['', [Validators.required, Validators.minLength(10)]],
     Full_description: [''],
-    Technologies_used: ['', Validators.required], // Ej. "Angular, Tailwind"
+    Technologies_used: ['', Validators.required], // Ejemplo: "Angular, CSS"
     Link_repository: ['', Validators.required],
     Link_demo: [''],
     Featured: [false]
   });
 
-  // Formulario reactivo para editar perfil
+  // Formulario para editar perfil
   profileForm = this.fb.nonNullable.group({
     Full_name: ['', [Validators.required, Validators.minLength(3)]],
     Specialty: ['', Validators.required],
@@ -74,7 +74,7 @@ export class Profile implements OnInit {
         this.loading.set(false);
         this.checkIfOwnProfile(prog);
 
-        // SEO dinámico por programador
+        // Configurar título y descripción de la página con los datos del desarrollador
         const photoUrl = prog.Profile_picture?.url
           ? (prog.Profile_picture.url.startsWith('/') 
               ? 'https://upbeat-chickens-1ee0436960.strapiapp.com' + prog.Profile_picture.url 
@@ -87,7 +87,7 @@ export class Profile implements OnInit {
           route: `/programador/${docId}`
         });
 
-        // Ejecutamos la animación en el siguiente tick del event loop
+        // Iniciar las animaciones visuales en la página
         setTimeout(() => {
           this.animateProfile();
         }, 50);
@@ -114,7 +114,7 @@ export class Profile implements OnInit {
     });
   }
 
-  // Captura el archivo seleccionado del input
+  // Obtener la imagen seleccionada
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
@@ -148,13 +148,13 @@ export class Profile implements OnInit {
     this.showAddProjectModal.set(true);
   }
 
-  // Enviar el nuevo proyecto o actualización a Strapi
+  // Guardar el proyecto nuevo o modificado
   onSubmitProject() {
     if (this.projectForm.invalid || !this.programmer()) return;
     this.savingProject.set(true);
 
     const formValues = this.projectForm.getRawValue();
-    // Generar un identificador slug simple del nombre del proyecto
+    // Crear un nombre amigable para la URL del proyecto
     const slug = formValues.Project_Name.toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
@@ -162,7 +162,7 @@ export class Profile implements OnInit {
     const saveProject = (imageId: number | null | undefined) => {
       const docId = this.programmer()?.documentId || '';
       
-      // Si estamos editando y no subimos imagen nueva, conservamos la actual
+      // Si estamos editando y no hay imagen nueva, conservar la actual
       let finalImageId = imageId;
       if (this.editingProjectId() && imageId === undefined) {
         const existingProj = this.programmer()?.projects?.find(p => p.documentId === this.editingProjectId());
@@ -181,7 +181,7 @@ export class Profile implements OnInit {
         Link_repository: formValues.Link_repository,
         Link_demo: formValues.Link_demo || null,
         Featured: formValues.Featured,
-        programmers: [docId], // Relación con el programador dueño del perfil
+        programmers: [docId], // Asociar el proyecto a este programador
         Main_image: finalImageId
       };
 
@@ -199,7 +199,7 @@ export class Profile implements OnInit {
           });
           this.selectedFile = null;
           this.editingProjectId.set(null);
-          // Recargar el perfil para mostrar el nuevo proyecto en la lista
+          // Recargar la información del programador para mostrar el proyecto
           this.loadProgrammerDetails(docId);
         },
         error: (err) => {

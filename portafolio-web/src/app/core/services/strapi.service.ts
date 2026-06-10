@@ -103,7 +103,7 @@ export class StrapiService {
         correoSolicitante: solicitud.correoSolicitante,
         descripcionProyecto: solicitud.descripcionProyecto,
         estado: 'Pendiente',
-        programer: solicitud.programadorId // Relación en Strapi 5
+        programer: solicitud.programadorId // Vincular con el programador seleccionado
       }
     };
     return this.http
@@ -144,9 +144,9 @@ export class StrapiService {
         Link_repository: proyectoData.Link_repository,
         Link_demo: proyectoData.Link_demo || null,
         Featured: proyectoData.Featured || false,
-        programmers: proyectoData.programmers || [], // array de documentIds
-        Main_image: proyectoData.Main_image || null, // ID numérico de la imagen
-        publishedAt: new Date().toISOString() // Publicar inmediatamente
+        programmers: proyectoData.programmers || [], // Lista de programadores del proyecto
+        Main_image: proyectoData.Main_image || null, // Identificador de la imagen seleccionada
+        publishedAt: new Date().toISOString() // Hacer visible el proyecto de inmediato
       }
     };
     return this.http.post<any>(`${this.apiUrl}/projects`, payload);

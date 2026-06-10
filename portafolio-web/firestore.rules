@@ -6,15 +6,15 @@ service cloud.firestore {
       
       allow read: if request.auth != null && 
         (resource.data.uid == request.auth.uid || 
-         resource.data.correoUsuario == request.auth.token.email ||
-         resource.data.correoSolicitante == request.auth.token.email ||
-         resource.data.correoProgramador == request.auth.token.email);
+         resource.data.correoUsuario.lower() == request.auth.token.email.lower() ||
+         resource.data.correoSolicitante.lower() == request.auth.token.email.lower() ||
+         resource.data.correoProgramador.lower() == request.auth.token.email.lower());
          
       allow update: if request.auth != null && 
         (resource.data.uid == request.auth.uid || 
-         resource.data.correoUsuario == request.auth.token.email ||
-         resource.data.correoSolicitante == request.auth.token.email ||
-         resource.data.correoProgramador == request.auth.token.email);
+         resource.data.correoUsuario.lower() == request.auth.token.email.lower() ||
+         resource.data.correoSolicitante.lower() == request.auth.token.email.lower() ||
+         resource.data.correoProgramador.lower() == request.auth.token.email.lower());
     }
   }
 }

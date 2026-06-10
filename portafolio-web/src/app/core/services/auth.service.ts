@@ -18,12 +18,12 @@ export class AuthService {
   private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
 
-  /** usuario actual (null si no autenticado) */
+  /** Usuario conectado actualmente (es null si no ha iniciado sesión) */
   readonly currentUser$ = user(this.auth);
 
 
 
-  /** Registra un nuevo usuario externo con nombre, email y contraseña */
+  /** Registrar un nuevo usuario con su nombre, correo y contraseña */
    register(nombre: string, email: string, password: string) {
     return from(
       createUserWithEmailAndPassword(this.auth, email, password).then(
@@ -35,18 +35,18 @@ export class AuthService {
     );
   }
 
-  /** Inicia sesión con email y contraseña */
+  /** Iniciar sesión con correo y contraseña */
   login(email: string, password: string) {
     return from(signInWithEmailAndPassword(this.auth, email, password));
   }
 
-  /** Inicio de sesión con cuenta de Google (opcional extra) */
+  /** Iniciar sesión con cuenta de Google */
   loginWithGoogle() {
     const provider = new GoogleAuthProvider();
     return from(signInWithPopup(this.auth, provider));
   }
 
-  /** Cierra la sesión del usuario actual */
+  /** Cerrar sesión */
   logout() {
     return from(signOut(this.auth));
   }

@@ -37,24 +37,36 @@ export class SolicitudesService {
   getSolicitudesUsuario(uid: string): Observable<Solicitud[]> {
     const solicitudesQuery = query(
       this.solicitudesRef,
-      where('uid', '==', uid),
-      orderBy('createdAt', 'desc')
+      where('uid', '==', uid)
     );
 
     return collectionData(solicitudesQuery, { idField: 'id' }).pipe(
-      map((items) => items.map((item) => this.mapSolicitud(item as SolicitudFirestore)))
+      map((items) => {
+        const mapped = items.map((item) => this.mapSolicitud(item as SolicitudFirestore));
+        return mapped.sort((a, b) => {
+          const dateA = a.fechaCreacion ? new Date(a.fechaCreacion).getTime() : 0;
+          const dateB = b.fechaCreacion ? new Date(b.fechaCreacion).getTime() : 0;
+          return dateB - dateA;
+        });
+      })
     );
   }
 
   getSolicitudesProgramador(email: string): Observable<Solicitud[]> {
     const solicitudesQuery = query(
       this.solicitudesRef,
-      where('correoProgramador', '==', email),
-      orderBy('createdAt', 'desc')
+      where('correoProgramador', '==', email.toLowerCase())
     );
 
     return collectionData(solicitudesQuery, { idField: 'id' }).pipe(
-      map((items) => items.map((item) => this.mapSolicitud(item as SolicitudFirestore)))
+      map((items) => {
+        const mapped = items.map((item) => this.mapSolicitud(item as SolicitudFirestore));
+        return mapped.sort((a, b) => {
+          const dateA = a.fechaCreacion ? new Date(a.fechaCreacion).getTime() : 0;
+          const dateB = b.fechaCreacion ? new Date(b.fechaCreacion).getTime() : 0;
+          return dateB - dateA;
+        });
+      })
     );
   }
 
@@ -62,13 +74,13 @@ export class SolicitudesService {
     const createdAt = new Date().toISOString();
     const payload: SolicitudFirestore = {
       uid: solicitud.uid ?? '',
-      correoUsuario: solicitud.correoUsuario ?? '',
+      correoUsuario: (solicitud.correoUsuario ?? '').toLowerCase(),
       nombreSolicitante: solicitud.nombreSolicitante ?? '',
-      correoSolicitante: solicitud.correoSolicitante ?? '',
+      correoSolicitante: (solicitud.correoSolicitante ?? '').toLowerCase(),
       descripcionProyecto: solicitud.descripcionProyecto ?? '',
       programadorId: solicitud.programadorId ?? '',
       programadorNombre: solicitud.programadorNombre ?? '',
-      correoProgramador: solicitud.correoProgramador ?? '',
+      correoProgramador: (solicitud.correoProgramador ?? '').toLowerCase(),
       estado: (solicitud.estado ?? 'Pendiente') as EstadoSolicitud,
       observacion: solicitud.observacion ?? '',
       createdAt,

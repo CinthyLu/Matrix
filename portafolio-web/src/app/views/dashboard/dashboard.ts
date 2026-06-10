@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { StrapiService } from '../../core/services/strapi.service';
 import { SolicitudesService } from '../../core/services/solicitudes.service';
+import { SeoService } from '../../core/services/seo.service';
 import { Programador, Solicitud } from '../../core/models/models';
 
 @Component({
@@ -19,23 +20,24 @@ export class Dashboard implements OnInit {
   private readonly solicitudesService = inject(SolicitudesService);
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
+  private readonly seoService = inject(SeoService);
 
-  // Estados de vista
+  // Control de pantallas y vistas
   isProgrammer = signal<boolean>(false);
   loading = signal<boolean>(true);
   programmersList = signal<Programador[]>([]);
 
-  // Listas de Solicitudes reales
+  // Listas de solicitudes de proyectos
   solicitudesEnviadas = signal<Solicitud[]>([]);
   solicitudesRecibidas = signal<Solicitud[]>([]);
 
-  // Datos del usuario logueado
+  // Datos del usuario conectado
   currentUserEmail: string | null = null;
   currentUserUid: string | null = null;
   currentUserName: string | null = null;
   currentProgrammerId: string | null = null;
 
-  // Formulario reactivo para enviar propuesta
+  // Formulario para crear una nueva propuesta
   solicitudForm = this.fb.nonNullable.group({
     programadorId: ['', Validators.required],
     nombreSolicitante: ['', [Validators.required, Validators.minLength(3)]],
@@ -43,7 +45,14 @@ export class Dashboard implements OnInit {
   });
 
   ngOnInit() {
-    // 1. Obtener los programadores desde Strapi para mapeo y listado
+    // Configurar etiquetas SEO para el panel
+    this.seoService.generateTags({
+      title: 'Veltrix Studio - Panel de Gestión de Solicitudes',
+      description: 'Consulta tus solicitudes de proyectos, envía nuevas propuestas técnicas o responde observaciones del equipo.',
+      route: '/solicitudes'
+    });
+
+    // Cargar la lista de programadores desde Strapi
     this.strapiService.getProgramadores().subscribe({
       next: (progs) => {
         this.programmersList.set(progs);
@@ -56,19 +65,19 @@ export class Dashboard implements OnInit {
   }
 
   private checkUserRole(programmers: Programador[]) {
-    // 2. Verificar el email del usuario autenticado
+    // Validar el rol del usuario conectado
     this.authService.currentUser$.subscribe({
       next: (user) => {
         if (user) {
           this.currentUserEmail = user.email || null;
           this.currentUserUid = user.uid;
 
-          // Autocompletar el nombre si está disponible en Firebase Auth
+          // Completar el nombre automáticamente con los datos de Firebase
           this.solicitudForm.patchValue({
             nombreSolicitante: user.displayName || ''
           });
 
-          // Leer queryParams para preseleccionar programador si viene desde el perfil
+          // Seleccionar programador automáticamente si venimos desde su perfil
           this.route.queryParams.subscribe(params => {
             const progId = params['progId'];
             if (progId) {
@@ -78,13 +87,13 @@ export class Dashboard implements OnInit {
             }
           });
 
-          // Si el correo electrónico coincide con algún programador de Strapi, habilitar vista de Programador
+          // Si el correo coincide con un programador, activar la vista de desarrollador
           const matchedProgrammer = programmers.find(p => p.Contact_Email.toLowerCase() === user.email?.toLowerCase());
           const isProg = Boolean(matchedProgrammer);
           this.currentProgrammerId = matchedProgrammer?.documentId ?? null;
           this.isProgrammer.set(isProg);
 
-          // Cargar solicitudes correspondientes
+          // Cargar las solicitudes del usuario
           this.cargarSolicitudes();
         } else {
           this.loading.set(false);
@@ -119,7 +128,7 @@ export class Dashboard implements OnInit {
     }
   }
 
-  // Enviar nueva propuesta
+  // Enviar una nueva propuesta de proyecto
   onEnviarSolicitud() {
     if (this.solicitudForm.invalid || !this.currentUserUid || !this.currentUserEmail) return;
 
@@ -153,7 +162,7 @@ export class Dashboard implements OnInit {
     });
   }
 
-  // Responder solicitud
+  // Registrar la respuesta del programador
   onResponder(solId: string, observacion: string) {
     if (!observacion.trim()) return;
 
@@ -162,7 +171,7 @@ export class Dashboard implements OnInit {
       observacion: observacion.toUpperCase(),
     }).subscribe({
       next: () => {
-        // Actualizar localmente la solicitud en la lista recibida
+        // Actualizar la solicitud en la lista que se muestra en pantalla
         this.solicitudesRecibidas.update(sols =>
           sols.map(s => s.id === solId ? { ...s, estado: 'Respondida', observacion: observacion.toUpperCase() } : s)
         );

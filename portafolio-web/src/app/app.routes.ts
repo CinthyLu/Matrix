@@ -7,14 +7,14 @@ export const routes: Routes = [
     loadComponent: () => import('./views/home/home').then((m) => m.Home),
     title: 'Veltrix Studio - Inicio',
   },
-  // ─── NUEVA RUTA: PROGRAMADORES ───
+  // Ruta para ver a los programadores
   {
     path: 'programadores',
     loadComponent: () =>
       import('./views/programadores/programadores').then((m) => m.Programadores),
     title: 'Veltrix Studio - Nuestro Equipo',
   },
-  // ─── NUEVA RUTA: PROYECTOS ───
+  // Ruta para ver los proyectos
   {
     path: 'proyectos',
     loadComponent: () =>
@@ -39,6 +39,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     title: 'Veltrix Studio - Panel de Solicitudes',
   },
-  // Redirección en caso de ruta no encontrada
+  // Redireccionar al inicio si la página no existe
   { path: '**', redirectTo: '' },
 ];
