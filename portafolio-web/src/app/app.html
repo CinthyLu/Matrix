@@ -1,0 +1,15 @@
+<div class="fixed inset-0 -z-50 overflow-hidden bg-dark-bg">
+  <div class="paint-texture absolute inset-0 opacity-30 mix-blend-overlay"></div>
+  <div class="glow-orb orb-1 absolute -top-40 -left-40 w-96 h-96 rounded-full bg-neon-cyan/10 blur-[100px]"></div>
+  <div class="glow-orb orb-2 absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-neon-teal/10 blur-[100px]"></div>
+</div>
+
+<app-header></app-header>
+
+<main class="min-h-[calc(100vh-140px)] w-full py-8">
+  <div class="mx-auto max-w-7xl px-6">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+<app-footer></app-footer>

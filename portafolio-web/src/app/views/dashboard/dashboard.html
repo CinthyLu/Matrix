@@ -1,0 +1,211 @@
+<div class="space-y-8 font-mono">
+  <!-- Cabecera de Sección -->
+  <div class="border-b border-dark-surface/60 pb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div>
+      <h1 class="text-3xl font-display font-extrabold tracking-widest text-white uppercase">
+        // PANEL DE SOLICITUDES
+      </h1>
+      <p class="text-xs text-gray-400 mt-1 tracking-wider uppercase">
+        {{ isProgrammer() ? 'Bandeja de Entrada Administrativa (Programador)' : 'Gestión de Solicitudes y Envíos de Proyectos' }}
+      </p>
+    </div>
+
+    <!-- Identificador de Rol con badge neón -->
+    <div class="flex items-center space-x-3">
+      <span class="text-xs text-gray-500 uppercase tracking-widest">ROL ACTUAL:</span>
+      <span [class.border-neon-teal]="!isProgrammer()" [class.text-neon-teal]="!isProgrammer()"
+            [class.border-neon-cyan]="isProgrammer()" [class.text-neon-cyan]="isProgrammer()"
+            class="px-3 py-1 border rounded text-xs uppercase tracking-widest bg-dark-surface/30 font-bold select-none">
+        {{ isProgrammer() ? 'ADMIN // PROGRAMADOR' : 'CLIENTE // EXTERNO' }}
+      </span>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <!-- Pantalla de carga técnica -->
+    <div class="p-12 text-center border border-dark-surface/40 bg-dark-surface/20 rounded-lg animate-pulse">
+      <div class="text-neon-cyan text-sm tracking-widest uppercase mb-2">CRITICAL SYSTEM LOADING...</div>
+      <div class="text-xs text-gray-500 uppercase">Consultando bases de datos de Firebase y Strapi CMS</div>
+    </div>
+  } @else {
+    
+    <!-- ───────────────────────────────────────────────────────────── -->
+    <!-- 1. VISTA DE CLIENTE EXTERNO -->
+    <!-- ───────────────────────────────────────────────────────────── -->
+    @if (!isProgrammer()) {
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Listado de Solicitudes Enviadas -->
+        <div class="lg:col-span-8 space-y-6">
+          <h2 class="text-lg font-bold tracking-widest text-white uppercase border-b border-dark-surface/30 pb-2">// HISTORIAL DE PROPUESTAS</h2>
+          
+          @if (solicitudesEnviadas().length === 0) {
+            <div class="p-8 border border-dashed border-dark-surface rounded text-center">
+              <p class="text-sm text-gray-500 uppercase tracking-wider">No se han registrado solicitudes de contacto en el sistema.</p>
+            </div>
+          } @else {
+            <div class="space-y-4">
+              @for (sol of solicitudesEnviadas(); track sol.id) {
+                <div class="bg-dark-surface/30 border border-dark-surface/60 rounded-md p-6 relative overflow-hidden transition-all duration-300 hover:border-dark-surface">
+                  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b border-dark-surface/30 pb-3">
+                    <div class="text-xs text-neon-teal">
+                      <span>ID: {{ sol.id }}</span>
+                      <span class="mx-2">|</span>
+                      <span>FECHA: {{ sol.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+                    </div>
+                    <!-- Badge de Estado Neón -->
+                    <span [class.border-yellow-500/30]="sol.estado === 'Pendiente'" [class.text-yellow-500]="sol.estado === 'Pendiente'"
+                          [class.bg-yellow-500/5]="sol.estado === 'Pendiente'"
+                          [class.border-neon-cyan/30]="sol.estado === 'Respondida'" [class.text-neon-cyan]="sol.estado === 'Respondida'"
+                          [class.bg-neon-cyan/5]="sol.estado === 'Respondida'"
+                          class="px-2.5 py-0.5 border rounded text-[10px] uppercase font-bold tracking-widest">
+                      {{ sol.estado }}
+                    </span>
+                  </div>
+
+                  <div class="space-y-3">
+                    <p class="text-sm text-white font-medium"><span class="text-gray-500 mr-2">// PROYECTO:</span>{{ sol.descripcionProyecto }}</p>
+                    <p class="text-xs text-gray-400"><span class="text-gray-500 mr-2">// PROGRAMADOR:</span>{{ sol.programadorNombre }}</p>
+                    
+                    @if (sol.observacion) {
+                      <div class="mt-4 p-4 bg-neon-cyan/5 border border-neon-cyan/20 rounded font-mono text-xs text-neon-cyan">
+                        <span class="font-extrabold mr-2">[RESPUESTA DE {{ sol.programadorNombre | uppercase }}]:</span> {{ sol.observacion }}
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Formulario Rápido de Solicitud (Fase 6: Conectado a Strapi) -->
+        <div class="lg:col-span-4 bg-dark-surface/30 border border-dark-surface/60 rounded-lg p-6 h-fit space-y-6">
+          <div class="border-b border-dark-surface/40 pb-3">
+            <h3 class="text-sm font-bold tracking-widest text-white uppercase">// NUEVA SOLICITUD</h3>
+            <p class="text-[10px] text-gray-500 mt-1 uppercase">Enviar propuesta técnica directa</p>
+          </div>
+
+          <form [formGroup]="solicitudForm" (ngSubmit)="onEnviarSolicitud()" class="space-y-4 text-xs">
+            <div class="space-y-2">
+              <label for="programadorId" class="text-[10px] text-gray-400 uppercase tracking-wider block">Programador Asignado</label>
+              <select 
+                id="programadorId"
+                formControlName="programadorId" 
+                class="w-full bg-dark-bg border border-dark-surface rounded p-2.5 text-white font-mono focus:outline-none focus:border-neon-cyan/50"
+              >
+                <option value="" disabled selected>-- SELECCIONAR PROGRAMADOR --</option>
+                @for (prog of programmersList(); track prog.id) {
+                  <option [value]="prog.documentId">{{ prog.Full_name }}</option>
+                } @empty {
+                  <option disabled>CONSULTANDO PROGRAMADORES...</option>
+                }
+              </select>
+              @if (solicitudForm.get('programadorId')?.touched && solicitudForm.get('programadorId')?.invalid) {
+                <p class="text-[9px] text-red-400 uppercase tracking-wider">* DEBE SELECCIONAR UN PROGRAMADOR.</p>
+              }
+            </div>
+
+            <div class="space-y-2">
+              <label for="nombreSolicitante" class="text-[10px] text-gray-400 uppercase tracking-wider block">Tu Nombre / Empresa</label>
+              <input 
+                id="nombreSolicitante"
+                type="text" 
+                formControlName="nombreSolicitante"
+                placeholder="EJ. CORPORACIÓN ALPHA" 
+                class="w-full bg-dark-bg border border-dark-surface rounded p-2.5 text-white placeholder-gray-700 font-mono focus:outline-none focus:border-neon-cyan/50" 
+              />
+              @if (solicitudForm.get('nombreSolicitante')?.touched && solicitudForm.get('nombreSolicitante')?.invalid) {
+                <p class="text-[9px] text-red-400 uppercase tracking-wider">* INGRESE EL NOMBRE (MÍNIMO 3 CARACTERES).</p>
+              }
+            </div>
+
+            <div class="space-y-2">
+              <label for="descripcionProyecto" class="text-[10px] text-gray-400 uppercase tracking-wider block">Descripción Detallada del Proyecto</label>
+              <textarea 
+                id="descripcionProyecto"
+                rows="4" 
+                formControlName="descripcionProyecto"
+                placeholder="EJ. REQUIERO EL DESARROLLO DE..." 
+                class="w-full bg-dark-bg border border-dark-surface rounded p-2.5 text-white placeholder-gray-700 font-mono focus:outline-none focus:border-neon-cyan/50 resize-none"
+              ></textarea>
+              @if (solicitudForm.get('descripcionProyecto')?.touched && solicitudForm.get('descripcionProyecto')?.invalid) {
+                <p class="text-[9px] text-red-400 uppercase tracking-wider">* INGRESE UNA DESCRIPCIÓN DETALLADA (MÍNIMO 10 CARACTERES).</p>
+              }
+            </div>
+
+            <button 
+              type="submit" 
+              [disabled]="solicitudForm.invalid"
+              class="w-full py-2.5 bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/30 text-neon-cyan font-bold tracking-widest uppercase rounded transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              ENVIAR PROPUESTA
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+
+    <!-- ───────────────────────────────────────────────────────────── -->
+    <!-- 2. VISTA DE ADMINISTRADOR / PROGRAMADOR -->
+    <!-- ───────────────────────────────────────────────────────────── -->
+    @if (isProgrammer()) {
+      <div class="space-y-6">
+        <h2 class="text-lg font-bold tracking-widest text-white uppercase border-b border-dark-surface/30 pb-2">// PROPUESTAS DE PROYECTOS RECIBIDAS</h2>
+
+        @if (solicitudesRecibidas().length === 0) {
+          <div class="p-8 border border-dashed border-dark-surface rounded text-center">
+            <p class="text-sm text-gray-500 uppercase tracking-wider">No se han recibido solicitudes dirigidas a tu perfil.</p>
+          </div>
+        } @else {
+          <div class="grid grid-cols-1 gap-6">
+            @for (sol of solicitudesRecibidas(); track sol.id) {
+              <div class="bg-dark-surface/20 border border-dark-surface/60 rounded-md p-6 relative overflow-hidden transition-all duration-300">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b border-dark-surface/30 pb-3">
+                  <div>
+                    <span class="text-xs text-neon-teal font-bold uppercase">DE: {{ sol.nombreSolicitante }} ({{ sol.correoSolicitante }})</span>
+                    <div class="text-[10px] text-gray-500 mt-1 uppercase">RECIBIDA EL: {{ sol.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</div>
+                  </div>
+                  <!-- Badge de Estado -->
+                  <span [class.border-yellow-500/30]="sol.estado === 'Pendiente'" [class.text-yellow-500]="sol.estado === 'Pendiente'"
+                        [class.bg-yellow-500/5]="sol.estado === 'Pendiente'"
+                        [class.border-neon-cyan/30]="sol.estado === 'Respondida'" [class.text-neon-cyan]="sol.estado === 'Respondida'"
+                        [class.bg-neon-cyan/5]="sol.estado === 'Respondida'"
+                        class="px-2.5 py-0.5 border rounded text-[10px] uppercase font-bold tracking-widest">
+                    {{ sol.estado }}
+                  </span>
+                </div>
+
+                <div class="space-y-4">
+                  <div class="bg-dark-bg/60 p-4 border border-dark-surface rounded text-sm text-gray-300 leading-relaxed font-sans">
+                    {{ sol.descripcionProyecto }}
+                  </div>
+
+                  @if (sol.estado === 'Pendiente') {
+                    <!-- Formulario de Respuesta Rápida -->
+                    <div class="space-y-3 pt-2">
+                      <label class="text-[10px] text-gray-400 uppercase tracking-wider block">// REGISTRAR OBSERVACIÓN DE RESPUESTA</label>
+                      <div class="flex flex-col sm:flex-row gap-3">
+                        <input #respInput type="text" placeholder="EJ. PROPUESTA EVALUADA. CONTACTAREMOS PARA AGENDA..." 
+                               class="flex-grow bg-dark-bg border border-dark-surface rounded px-3 py-2 text-xs text-white placeholder-gray-700 font-mono focus:outline-none focus:border-neon-cyan/50 uppercase" />
+                        <button (click)="onResponder(sol.id!, respInput.value); respInput.value = ''" 
+                                class="px-5 py-2 bg-neon-cyan/10 hover:bg-neon-cyan/20 border border-neon-cyan/30 text-neon-cyan font-bold tracking-widest uppercase rounded text-xs transition-all duration-200">
+                          RESPONDER
+                        </button>
+                      </div>
+                    </div>
+                  } @else {
+                    <div class="p-4 bg-neon-cyan/5 border border-neon-cyan/20 rounded font-mono text-xs text-neon-cyan">
+                      <span class="font-extrabold mr-2">[TU RESPUESTA]:</span> {{ sol.observacion }}
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+  }
+</div>

@@ -1,0 +1,13 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Allow: /programadores
+Allow: /proyectos
+Allow: /programador/
+
+# Evitar indexación de áreas administrativas y de acceso
+Disallow: /login
+Disallow: /solicitudes
+
+# Sitemap oficial del sitio web
+Sitemap: https://veltrix-6d976.web.app/sitemap.xml

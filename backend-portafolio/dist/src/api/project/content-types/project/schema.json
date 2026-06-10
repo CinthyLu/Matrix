@@ -1,0 +1,73 @@
+{
+    "kind": "collectionType",
+    "collectionName": "projects",
+    "info": {
+        "singularName": "project",
+        "pluralName": "projects",
+        "displayName": "Project"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "Project_Name": {
+            "type": "string",
+            "required": true
+        },
+        "Identifier": {
+            "type": "uid",
+            "targetField": "Project_Name",
+            "required": true
+        },
+        "Short_description": {
+            "type": "text",
+            "required": true
+        },
+        "Full_description": {
+            "type": "text"
+        },
+        "Main_image": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ]
+        },
+        "tipo_de_proyecto": {
+            "type": "enumeration",
+            "required": true,
+            "enum": [
+                "academico",
+                "personal",
+                "laboral",
+                "simulado"
+            ]
+        },
+        "Technologies_used": {
+            "type": "string",
+            "required": true
+        },
+        "Link_repository": {
+            "type": "string",
+            "required": true
+        },
+        "Link_demo": {
+            "type": "string"
+        },
+        "Featured": {
+            "type": "boolean",
+            "required": true,
+            "default": false
+        },
+        "programmers": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "api::programer.programer",
+            "mappedBy": "projects"
+        }
+    }
+}

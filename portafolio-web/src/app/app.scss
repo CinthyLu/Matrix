@@ -1,0 +1,76 @@
+/* Estilos globales y específicos del Layout del App Component */
+
+// Gradientes y variables específicas
+.fixed {
+  background: radial-gradient(circle at 50% 50%, #151c24 0%, #0B0C10 100%);
+}
+
+// Animación de los globos de fondo de neón (Glow Orbs)
+.glow-orb {
+  filter: blur(120px);
+  animation: float 20s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.orb-1 {
+  animation-duration: 25s;
+}
+
+.orb-2 {
+  animation-duration: 30s;
+  animation-delay: -10s;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(10%, 15%) scale(1.15);
+  }
+  100% {
+    transform: translate(-10%, -5%) scale(0.9);
+  }
+}
+
+// Textura de Lienzo de Cuadro Pintado (Fase 1: Preparación Estética)
+.paint-texture {
+  background-image: radial-gradient(#1f2833 0.5px, transparent 0.5px),
+                    radial-gradient(#1f2833 0.5px, #0b0c10 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  opacity: 0.12;
+}
+
+// Estilo activo y animaciones para enlaces de navegación
+nav a {
+  position: relative;
+  
+  &.text-neon-cyan::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #66FCF1;
+    box-shadow: 0 0 10px #66FCF1, 0 0 20px #45A29E;
+  }
+}
+
+// Animación de entrada premium para el router outlet
+router-outlet + * {
+  display: block;
+  animation: viewEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes viewEnter {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

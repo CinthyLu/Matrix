@@ -1,0 +1,45 @@
+<section class="max-w-7xl mx-auto px-6 py-12">
+  <div class="mb-12">
+    <h1 class="text-4xl font-extrabold text-white tracking-tight">Nuestro Equipo</h1>
+    <p class="text-gray-400 mt-2">Expertos listos para llevar tu proyecto al siguiente nivel.</p>
+  </div>
+
+  @if (loading()) {
+    <div class="text-center py-20">
+      <div class="animate-pulse text-neon-cyan font-mono">CARGANDO TALENTO...</div>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      @for (prog of programadores(); track prog.documentId) {
+        <article class="bg-dark-surface border border-gray-700/50 rounded-xl p-6 hover:border-neon-cyan/50 transition-all duration-300 group">
+          
+          <h2 class="text-xl font-bold text-white group-hover:text-neon-cyan transition-colors">
+            {{ prog.Full_name }}
+          </h2>
+          <p class="text-neon-teal text-sm font-mono mt-1">{{ prog.Specialty }}</p>
+          
+          <p class="text-gray-400 text-sm mt-4 leading-relaxed line-clamp-3">
+            {{ prog.Short_description }}
+          </p>
+
+          @if (prog.tecnologias && prog.tecnologias.length > 0) {
+            <div class="mt-6 flex flex-wrap gap-2">
+              @for (tech of prog.tecnologias.slice(0, 3); track tech.documentId) {
+                <span class="text-[10px] uppercase tracking-wider px-2 py-1 bg-dark-bg border border-gray-600 rounded text-gray-300">
+                  {{ tech.nombre }}
+                </span>
+              }
+            </div>
+          }
+
+          <div class="mt-6 pt-6 border-t border-gray-800">
+            <a [routerLink]="['/programador', prog.documentId]" 
+               class="inline-block text-xs font-bold uppercase text-white hover:text-neon-cyan underline decoration-neon-cyan/50 underline-offset-4">
+               Ver perfil completo
+            </a>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>

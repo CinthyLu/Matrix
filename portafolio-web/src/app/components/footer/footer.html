@@ -1,0 +1,97 @@
+<footer class="w-full border-t border-dark-surface/40 bg-dark-bg/70 mt-16">
+  <div class="mx-auto max-w-7xl px-6 py-10">
+
+    <!-- GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+      <!-- Branding -->
+      <div>
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-md bg-neon-cyan/10 text-neon-cyan flex items-center justify-center font-bold">
+            &lt;/&gt;
+          </div>
+
+          <div>
+            <h2 class="text-white font-bold text-lg">
+              Veltrix Estudio
+            </h2>
+
+            <p class="text-sm text-gray-400 mt-1 leading-relaxed">
+              Desarrollo web moderno, inteligencia artificial y sistemas escalables.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navegación -->
+      <div>
+        <h3 class="text-xs uppercase tracking-[0.25em] text-gray-500 mb-4">
+          Navegación
+        </h3>
+
+        <ul class="space-y-3">
+          <li *ngFor="let link of navLinks">
+            <a [href]="link.href" class="text-gray-300 hover:text-neon-cyan transition-colors">
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contacto -->
+      <div>
+        <h3 class="text-xs uppercase tracking-[0.25em] text-gray-500 mb-4">
+          Contacto
+        </h3>
+
+        <div class="space-y-3 text-gray-300">
+
+          <a [href]="'mailto:' + contacto.email" class="block hover:text-neon-cyan transition-colors">
+            {{ contacto.email }}
+          </a>
+
+          <a [href]="contacto.github" target="_blank" class="block hover:text-neon-cyan transition-colors">
+            GitHub
+          </a>
+
+          <a [href]="contacto.linkedin" target="_blank" class="block hover:text-neon-cyan transition-colors">
+            LinkedIn
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Colaboradores -->
+    <div class="col-span-1">
+      <h3 class="text-sm uppercase tracking-widest text-gray-400 mb-2">Colaboradores</h3>
+      <div class="space-y-4 text-gray-300">
+        <div *ngFor="let p of coautores">
+          <div class="font-semibold text-white">{{ p.name }}</div>
+          <div class="text-sm">
+            <a [href]="'mailto:'+p.email" class="block hover:text-neon-teal">{{ p.email }}</a>
+            <a [href]="p.github" target="_blank" class="block hover:text-neon-teal">github.com/{{
+              p.github.split('/').pop() }}</a>
+            <a *ngIf="p.linkedin" [href]="p.linkedin" target="_blank" class="block hover:text-neon-teal">linkedin.com/{{
+              p.linkedin.split('/').slice(-2).join('/') }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bottom -->
+    <div
+      class="border-t border-dark-surface/40 mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+
+      <span>
+        © {{ year }} {{ estudio }}
+      </span>
+
+      <span>
+        {{ curso }}
+      </span>
+
+    </div>
+
+  </div>
+</footer>

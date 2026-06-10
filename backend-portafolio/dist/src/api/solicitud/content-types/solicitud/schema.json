@@ -1,0 +1,53 @@
+{
+    "kind": "collectionType",
+    "collectionName": "solicitudes",
+    "info": {
+        "singularName": "solicitud",
+        "pluralName": "solicitudes",
+        "displayName": "Solicitud"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "uid": {
+            "type": "string",
+            "required": true
+        },
+        "correoUsuario": {
+            "type": "email",
+            "required": true
+        },
+        "nombreSolicitante": {
+            "type": "string",
+            "required": true
+        },
+        "correoSolicitante": {
+            "type": "email",
+            "required": true
+        },
+        "descripcionProyecto": {
+            "type": "text",
+            "required": true
+        },
+        "estado": {
+            "type": "enumeration",
+            "enum": [
+                "Pendiente",
+                "Respondida"
+            ],
+            "default": "Pendiente",
+            "required": true
+        },
+        "observacion": {
+            "type": "text",
+            "required": false
+        },
+        "programer": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::programer.programer"
+        }
+    }
+}

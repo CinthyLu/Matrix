@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /solicitudes/{solicitudId} {
+      allow create: if request.auth != null;
+      
+      allow read: if request.auth != null && 
+        (resource.data.uid == request.auth.uid || 
+         resource.data.correoUsuario == request.auth.token.email ||
+         resource.data.correoSolicitante == request.auth.token.email ||
+         resource.data.correoProgramador == request.auth.token.email);
+         
+      allow update: if request.auth != null && 
+        (resource.data.uid == request.auth.uid || 
+         resource.data.correoUsuario == request.auth.token.email ||
+         resource.data.correoSolicitante == request.auth.token.email ||
+         resource.data.correoProgramador == request.auth.token.email);
+    }
+  }
+}
