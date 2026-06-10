@@ -1,61 +1,128 @@
-# 🚀 Getting started with Strapi
+<div align="center">
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+![Portada del Proyecto](../portada.png)
 
-### `develop`
+# INFORME TÉCNICO: CMS HEADLESS (BACKEND)
+### Servidor de Contenidos y Base de Datos Relacional - DevCuenca Solutions
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
-
-```
-npm run develop
-# or
-yarn develop
-```
-
-### `start`
-
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
-npm run build
-# or
-yarn build
-```
-
-## ⚙️ Deployment
-
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
-```
-yarn strapi deploy
-```
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+**Materia:** Programación y Plataformas Web  
+**Docente:** Ing. Pablo Torres  
+**Institución:** Universidad Politécnica Salesiana  
+**Ciclo:** Período Académico 2026  
 
 ---
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+![Estado](https://img.shields.io/badge/componente-backend-blueviolet?style=for-the-badge)
+![Strapi](https://img.shields.io/badge/Strapi-v5-4945FF?style=for-the-badge&logo=strapi&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+
+</div>
+
+---
+
+## 1. Resumen Ejecutivo
+Este componente representa el backend desacoplado (Headless CMS) del **Portafolio DevCuenca Solutions**, construido sobre la plataforma **Strapi v5**. Su propósito es gestionar y estructurar de manera centralizada la información institucional, perfiles de los desarrolladores, portafolios de proyectos individuales y tecnologías utilizadas.
+Al exponer una API REST segura mediante tokens Bearer, permite al cliente frontend consultar y actualizar datos en tiempo real de forma dinámica.
+
+---
+
+## 2. Arquitectura de Contenidos (Esquema del CMS)
+El backend utiliza los siguientes modelos de contenido (Content-Types) estructurados de forma relacional:
+
+### A. Colecciones (Collection Types)
+1. **Programers (`api::programer.programer`):**
+   - `Full_name` (Text, requerido): Nombre y apellido del desarrollador.
+   - `Specialty` (Text): Área de enfoque del desarrollador.
+   - `Short_description` (Text): Resumen introductorio del perfil.
+   - `Full_description` (Rich Text): Experiencia y conocimientos extendidos.
+   - `Contact_Email` (Email, único): Correo corporativo del programador (clave de autenticación).
+   - `Profile_picture` (Media, single image): Foto del programador.
+   - `tecnologias` (Relación Many-to-Many con *Tecnologias*).
+   - `projects` (Relación Many-to-Many con *Projects*).
+2. **Projects (`api::project.project`):**
+   - `Project_Name` (Text, requerido): Nombre de la aplicación o software.
+   - `Identifier` (UID): Identificador amigable (slug) autogenerado.
+   - `Short_description` (Text): Descripción breve.
+   - `Full_description` (Rich Text): Retos y arquitectura del proyecto.
+   - `tipo_de_proyecto` (Enumeración): `personal` | `empresa` | `colaborativo`.
+   - `Technologies_used` (Text): Tecnologías separadas por comas.
+   - `Link_repository` (Text): Enlace de código de GitHub/GitLab.
+   - `Link_demo` (Text): Demo en vivo.
+   - `Featured` (Boolean): Marca para mostrar en la sección destacada de inicio.
+   - `Main_image` (Media, single image): Portada del proyecto.
+3. **Servicios (`api::servicio.servicio`):**
+   - `service_name` (Text): Nombre del servicio brindado.
+   - `description` (Text): Detalle del servicio.
+4. **Tecnologias (`api::tecnologia.tecnologia`):**
+   - `nombre` (Text): Nombre del lenguaje o framework.
+   - `logo` (Media): Imagen del logotipo.
+   - `categoria` (Text): Categoría (Frontend, Backend, Database).
+
+### B. Páginas Únicas (Single Types)
+1. **Home (`api::home.home`):**
+   - `titulo_hero` (Text), `subtitulo_hero` (Text), `descripcion_empresa` (Rich Text) e `imagen_hero` (Media).
+
+---
+
+## 3. Instalación y Configuración Local
+
+### Requisitos Previos
+* Node.js v18.0 o superior.
+* Gestor de paquetes `npm` o `pnpm`.
+
+### Pasos de Inicialización
+
+1. Accede al directorio del servidor:
+   ```bash
+   cd backend-portafolio
+   ```
+
+2. Instala los módulos y dependencias:
+   ```bash
+   pnpm install
+   ```
+
+3. Configura el archivo de entorno `.env` en la raíz de `backend-portafolio` basándote en el archivo `.env.example`:
+   ```env
+   HOST=0.0.0.0
+   PORT=1337
+   APP_KEYS=llaves_aleatorias_de_encriptacion
+   API_TOKEN_SALT=salt_aleatorio
+   ADMIN_JWT_SECRET=secret_jwt_admin
+   TRANSFER_TOKEN_SALT=salt_transfer
+   DATABASE_CLIENT=sqlite
+   DATABASE_FILENAME=.tmp/data.db
+   ```
+
+4. Ejecuta el servidor en modo desarrollo (con recarga automática):
+   ```bash
+   pnpm run develop
+   ```
+   El panel de administración estará disponible en: [http://localhost:1337/admin](http://localhost:1337/admin). Crea tu usuario administrador inicial para comenzar a ingresar contenido de prueba.
+
+---
+
+## 4. Configuración de Roles y Permisos de la API
+Para permitir que el frontend se comunique correctamente, ve a **Settings** -> **Users & Permissions Plugin** -> **Roles** en tu Panel de Administración:
+
+1. **Rol Public (Público):**
+   - Habilita las acciones de consulta (`find` y `findOne`) para: `Programer`, `Project`, `Servicio`, `Tecnologia` y `Home`.
+2. **Token de la API (API Token):**
+   - Genera un token de tipo *Full Access* o *Custom* con permisos de lectura (`find`, `findOne`) y de escritura (`create`, `update`, `upload`) para que el frontend de Angular pueda actualizar los datos de perfil y registrar proyectos en la biblioteca de medios desde la interfaz.
+
+---
+
+## 5. Comandos de Producción
+* **Compilar el panel administrativo:**
+  ```bash
+  pnpm run build
+  ```
+* **Arrancar en modo producción:**
+  ```bash
+  pnpm run start
+  ```
+* **Exportar/Importar base de datos y recursos:**
+  ```bash
+  npx strapi export
+  ```

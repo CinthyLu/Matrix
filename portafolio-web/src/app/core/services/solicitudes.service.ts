@@ -24,6 +24,16 @@ export class SolicitudesService {
 
   private readonly solicitudesRef = collection(this.firestore, 'solicitudes');
 
+  private cleanUndefined(obj: any): any {
+    const clean: any = {};
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] !== undefined) {
+        clean[key] = obj[key];
+      }
+    });
+    return clean;
+  }
+
   getSolicitudesUsuario(uid: string): Observable<Solicitud[]> {
     const solicitudesQuery = query(
       this.solicitudesRef,
@@ -65,19 +75,18 @@ export class SolicitudesService {
       updatedAt: createdAt,
     };
 
-    return from(addDoc(this.solicitudesRef, payload)).pipe(
+    return from(addDoc(this.solicitudesRef, this.cleanUndefined(payload))).pipe(
       map((reference) => this.mapSolicitud({ ...payload, id: reference.id }))
     );
   }
 
   actualizarSolicitud(id: string, cambios: Partial<Solicitud>): Observable<void> {
     const reference = doc(this.firestore, 'solicitudes', id);
-    return from(
-      updateDoc(reference, {
-        ...cambios,
-        updatedAt: new Date().toISOString(),
-      })
-    );
+    const payload = this.cleanUndefined({
+      ...cambios,
+      updatedAt: new Date().toISOString(),
+    });
+    return from(updateDoc(reference, payload));
   }
 
   private mapSolicitud(item: SolicitudFirestore): Solicitud {
